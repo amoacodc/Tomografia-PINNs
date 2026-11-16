@@ -1,0 +1,9 @@
+{
+  "descripcion": "Datos sintéticos: tiempos de primera llegada calculados con Fast Marching (scikit-fmm, 2º orden, malla 201x201) sobre el modelo verdadero, más ruido gaussiano.",
+  "ruido_desv_std_s": 0.001,
+  "semilla": 0,
+  "n_fuentes": 12,
+  "n_receptores": 52,
+  "n_tiempos": 624,
+  "modelo": "v = 2.0 + 1.0 z - 0.6 exp(-((x-0.55)^2+(z-0.45)^2)/(2*0.10^2)) + 0.5 exp(-((x-0.30)^2+(z-0.78)^2)/(2*0.08^2))  [km/s, x y z en km]"
+}

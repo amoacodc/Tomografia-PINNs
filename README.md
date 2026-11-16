@@ -54,6 +54,17 @@ respecto a `v` sale de la diferenciación automática.
 La anomalía lenta y el gradiente se recuperan bien; la anomalía rápida profunda queda
 suavizada, como es típico por la cobertura limitada de rayos en geometría entre pozos.
 
+## Datos
+
+Los datos sintéticos usados están guardados en `data/` (se regeneran con `python export_data.py`):
+
+| Archivo | Contenido |
+|---|---|
+| `tiempos.csv` | 624 tiempos: `id_fuente, xs_km, zs_km, id_receptor, xr_km, zr_km, t_obs_s, t_sin_ruido_s` |
+| `fuentes.csv`, `receptores.csv` | posiciones (km) |
+| `modelo_verdadero.npz` | modelo de velocidad verdadero en malla 201×201 (`x_km`, `z_km`, `v_km_s`) |
+| `info.json` | descripción, fórmula del modelo, ruido y semilla |
+
 ## Uso
 
 ```bash
@@ -70,6 +81,8 @@ Salidas en `outputs/`: `velocidad.png`, `entrenamiento.png`, `ajuste_tiempos.png
 ## Estructura
 
 ```
+data/                  # datos sintéticos guardados
+export_data.py         # exporta los datos a data/
 pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (datos + validación)
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización
 run_tomography.py      # generación de datos, entrenamiento, evaluación y figuras

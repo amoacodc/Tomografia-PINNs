@@ -1,0 +1,76 @@
+"""Modelo sintético y problema directo (ecuación eikonal resuelta con Fast Marching).
+
+Se usa únicamente para generar los datos "observados" y para validar de forma
+independiente el modelo de velocidad invertido por la PINN.
+"""
+from dataclasses import dataclass
+
+import numpy as np
+import skfmm
+from scipy.interpolate import RegularGridInterpolator
+
+
+@dataclass
+class Grid:
+    xmin: float = 0.0
+    xmax: float = 1.0   # km
+    zmin: float = 0.0
+    zmax: float = 1.0   # km
+    n: int = 201
+
+    @property
+    def x(self):
+        return np.linspace(self.xmin, self.xmax, self.n)
+
+    @property
+    def z(self):
+        return np.linspace(self.zmin, self.zmax, self.n)
+
+    @property
+    def dx(self):
+        return (self.xmax - self.xmin) / (self.n - 1)
+
+    def mesh(self):
+        return np.meshgrid(self.x, self.z, indexing="xy")  # X[iz, ix], Z[iz, ix]
+
+
+def true_velocity(x, z):
+    """Velocidad verdadera (km/s): gradiente vertical + anomalía lenta + anomalía rápida."""
+    v = 2.0 + 1.0 * z
+    v = v - 0.6 * np.exp(-((x - 0.55) ** 2 + (z - 0.45) ** 2) / (2 * 0.10 ** 2))
+    v = v + 0.5 * np.exp(-((x - 0.30) ** 2 + (z - 0.78) ** 2) / (2 * 0.08 ** 2))
+    return v
+
+
+def crosswell_geometry(n_src=12, n_rec_well=31, n_rec_surf=21):
+    """Fuentes en el pozo izquierdo; receptores en el pozo derecho y en superficie."""
+    src = np.stack([np.full(n_src, 0.02), np.linspace(0.05, 0.95, n_src)], axis=1)
+    rec_w = np.stack([np.full(n_rec_well, 0.98), np.linspace(0.02, 0.98, n_rec_well)], axis=1)
+    rec_s = np.stack([np.linspace(0.10, 0.90, n_rec_surf), np.full(n_rec_surf, 0.0)], axis=1)
+    return src, np.concatenate([rec_w, rec_s], axis=0)
+
+
+def eikonal_fmm(v_grid, grid: Grid, src_xz):
+    """Tiempo de viaje T(x, z) para una fuente puntual con Fast Marching de 2º orden."""
+    X, Z = grid.mesh()
+    r0 = 2.0 * grid.dx
+    phi = np.sqrt((X - src_xz[0]) ** 2 + (Z - src_xz[1]) ** 2) - r0
+    t = skfmm.travel_time(phi, v_grid, dx=grid.dx, order=2)
+    # Corrección del radio inicial: tiempo desde la fuente hasta el círculo de radio r0
+    ix = int(round((src_xz[0] - grid.xmin) / grid.dx))
+    iz = int(round((src_xz[1] - grid.zmin) / grid.dx))
+    t = np.asarray(t) + r0 / v_grid[iz, ix]
+    inside = phi < 0
+    t[inside] = np.sqrt((X[inside] - src_xz[0]) ** 2 + (Z[inside] - src_xz[1]) ** 2) / v_grid[iz, ix]
+    return t
+
+
+def traveltimes(v_grid, grid: Grid, src, rec):
+    """Matriz de tiempos T[i_src, i_rec] y campos completos T[i_src, iz, ix]."""
+    fields, tt = [], np.zeros((len(src), len(rec)))
+    for i, s in enumerate(src):
+        t = eikonal_fmm(v_grid, grid, s)
+        interp = RegularGridInterpolator((grid.z, grid.x), t)
+        tt[i] = interp(rec[:, ::-1])
+        fields.append(t)
+    return tt, np.stack(fields)

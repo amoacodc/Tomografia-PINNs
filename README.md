@@ -54,6 +54,32 @@ respecto a `v` sale de la diferenciación automática.
 La anomalía lenta y el gradiente se recuperan bien; la anomalía rápida profunda queda
 suavizada, como es típico por la cobertura limitada de rayos en geometría entre pozos.
 
+## Versión 3D
+
+`run_tomography_3d.py` hace lo mismo en un cubo de 1 km³ (`pinn_tomo/forward3d.py`):
+
+* Modelo: gradiente vertical + anomalía lenta esférica (−0.6 km/s en (0.55, 0.50, 0.45))
+  + anomalía rápida (+0.5 km/s en (0.35, 0.35, 0.75)).
+* Geometría: 12 fuentes en 2 pozos; 112 receptores en 3 pozos y una malla 8×8 en
+  superficie → **1344 tiempos** con 1 ms de ruido (FMM 3D en malla 161³).
+* Las mismas redes con `dim=3`: `tau_net(x, y, z, xs, ys, zs)` y `v_net(x, y, z)`.
+
+| Métrica (3D, ~3.5 min en CPU) | Valor |
+|---|---|
+| RMS tiempos, modelo inicial | 37.8 ms |
+| RMS tiempos, modelo PINN (recalculado con FMM 3D) | **1.73 ms** (ruido = 1 ms) |
+| Error relativo de velocidad | 2.3 % |
+
+![cortes 3D](outputs_3d/velocidad_cortes.png)
+
+Como en 2D, la anomalía lenta y el gradiente se recuperan (suavizados) y la anomalía
+rápida profunda apenas aparece por la cobertura limitada de rayos.
+
+```bash
+python run_tomography_3d.py                 # lee data/3d/ (o lo genera si no existe)
+python run_tomography_3d.py --iters 20000
+```
+
 ## Datos
 
 Los datos sintéticos usados están guardados en `data/` (se regeneran con `python export_data.py`):
@@ -64,6 +90,7 @@ Los datos sintéticos usados están guardados en `data/` (se regeneran con `pyth
 | `fuentes.csv`, `receptores.csv` | posiciones (km) |
 | `modelo_verdadero.npz` | modelo de velocidad verdadero en malla 201×201 (`x_km`, `z_km`, `v_km_s`) |
 | `info.json` | descripción, fórmula del modelo, ruido y semilla |
+| `3d/` | datos 3D: `tiempos.csv` (con columnas `y`), `fuentes.csv`, `receptores.csv`, `info.json` |
 
 ## Uso
 
@@ -85,6 +112,8 @@ data/                  # datos sintéticos guardados
 export_data.py         # exporta los datos a data/
 pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (datos + validación)
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización
+pinn_tomo/forward3d.py # versión 3D del modelo, geometría y FMM
+run_tomography_3d.py   # inversión 3D
 run_tomography.py      # generación de datos, entrenamiento, evaluación y figuras
 ```
 

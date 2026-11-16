@@ -1,4 +1,4 @@
-"""PINN para tomografía de tiempos de viaje (inspirado en PINNtomo, Waheed et al. 2021).
+"""PINN para tomografía (2D o 3D: `dim` = nº de coordenadas espaciales) de tiempos de viaje (inspirado en PINNtomo, Waheed et al. 2021).
 
 Dos redes:
   * tau_net(x, z, xs, zs) -> tau > 0, con T = T0 * tau y T0 = |x - xs| (eikonal factorizada).
@@ -40,13 +40,13 @@ class VelocityNet(nn.Module):
     sesgo espectral del MLP y permite recuperar anomalías más compactas.
     """
 
-    def __init__(self, vmin, vmax, width=32, depth=4, n_fourier=0, sigma=2.0):
+    def __init__(self, vmin, vmax, width=32, depth=4, n_fourier=0, sigma=2.0, dim=2):
         super().__init__()
         self.vmin, self.vmax = vmin, vmax
         self.n_fourier = n_fourier
         if n_fourier > 0:
-            self.register_buffer("B", sigma * torch.randn(2, n_fourier))
-        n_in = 2 * n_fourier if n_fourier > 0 else 2
+            self.register_buffer("B", sigma * torch.randn(dim, n_fourier))
+        n_in = 2 * n_fourier if n_fourier > 0 else dim
         self.mlp = MLP(n_in, 1, width, depth)
         nn.init.zeros_(self.mlp.net[-1].weight)  # arranca con v constante = (vmin+vmax)/2
 
@@ -61,10 +61,10 @@ class VelocityNet(nn.Module):
 
 
 class TauNet(nn.Module):
-    def __init__(self, s_ref, width=64, depth=6):
+    def __init__(self, s_ref, width=64, depth=6, dim=2):
         super().__init__()
         self.s_ref = s_ref
-        self.mlp = MLP(4, 1, width, depth)
+        self.mlp = MLP(2 * dim, 1, width, depth)
 
     def forward(self, xz, sxz):
         return self.s_ref * torch.exp(self.mlp(torch.cat([2 * xz - 1, 2 * sxz - 1], dim=1)))

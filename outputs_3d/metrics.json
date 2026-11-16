@@ -1,0 +1,8 @@
+{
+  "rmse_velocidad_km_s": 0.05825125763060591,
+  "error_rel_velocidad_%": 2.3202951013564785,
+  "rms_tiempos_modelo_inicial_ms": 37.83787299491414,
+  "rms_tiempos_modelo_invertido_ms (FMM)": 1.7298796568611194,
+  "ruido_ms": 1.0,
+  "tiempo_entrenamiento_s": 197.88756489753723
+}

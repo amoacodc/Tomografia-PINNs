@@ -32,6 +32,9 @@ def parse_args():
     p.add_argument("--w-reg", type=float, default=0.0)
     p.add_argument("--v-width", type=int, default=48)
     p.add_argument("--tau-width", type=int, default=64)
+    p.add_argument("--v-fourier", type=int, default=0, help="nº de características de Fourier en v_net")
+    p.add_argument("--v-sigma", type=float, default=2.0)
+    p.add_argument("--dense", action="store_true", help="geometría densa (27 fuentes); datos en data/3d_densa")
     p.add_argument("--noise", type=float, default=1e-3, help="desv. estándar del ruido (s)")
     p.add_argument("--n-grid", type=int, default=161, help="malla FMM para datos y validación")
     p.add_argument("--vmin", type=float, default=1.0)
@@ -55,7 +58,7 @@ def make_or_load_data(a, grid, v_true):
         return src, rec, t_obs
     print("Generando datos sintéticos 3D con FMM...")
     rng = np.random.default_rng(a.seed)
-    src, rec = geometry_3d()
+    src, rec = geometry_3d(dense=a.dense)
     t_clean = traveltimes(v_true, grid, src, rec)
     t_obs = t_clean + a.noise * rng.standard_normal(t_clean.shape)
     d.mkdir(parents=True, exist_ok=True)
@@ -86,6 +89,8 @@ def make_or_load_data(a, grid, v_true):
 
 def main():
     a = parse_args()
+    if a.dense and a.data == "data/3d":
+        a.data = "data/3d_densa"
     torch.manual_seed(a.seed)
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
 
@@ -101,7 +106,7 @@ def main():
     src_t = torch.tensor(src, dtype=torch.float32)
     t_scale = float(T_obs.abs().mean())
 
-    v_net = VelocityNet(a.vmin, a.vmax, width=a.v_width, dim=3)
+    v_net = VelocityNet(a.vmin, a.vmax, width=a.v_width, n_fourier=a.v_fourier, sigma=a.v_sigma, dim=3)
     tau_net = TauNet(s_ref=2.0 / (a.vmin + a.vmax), width=a.tau_width, dim=3)
     opt = torch.optim.Adam(list(v_net.parameters()) + list(tau_net.parameters()), lr=a.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.iters, eta_min=a.lr * 0.02)

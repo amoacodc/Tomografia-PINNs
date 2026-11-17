@@ -59,10 +59,18 @@ def _well(x, y, z_vals):
     return np.stack([np.full_like(z_vals, x), np.full_like(z_vals, y), z_vals], axis=1)
 
 
-def geometry_3d(n_src_well=6, n_rec_well=16, n_surf=8):
-    """Fuentes en 2 pozos (x≈0); receptores en 3 pozos (x≈1 y y≈1) y malla en superficie."""
+def geometry_3d(n_src_well=6, n_rec_well=16, n_surf=8, dense=False):
+    """Fuentes en 2 pozos (x≈0); receptores en 3 pozos (x≈1 y y≈1) y malla en superficie.
+
+    ``dense=True`` añade fuentes en un tercer pozo (x=0.5, y=0.02) y una malla 3x3 en superficie.
+    """
     zs = np.linspace(0.1, 0.9, n_src_well)
     src = np.concatenate([_well(0.02, 0.25, zs), _well(0.02, 0.75, zs)])
+    if dense:
+        g3 = np.linspace(0.2, 0.8, 3)
+        sx, sy = np.meshgrid(g3, g3)
+        src = np.concatenate([src, _well(0.50, 0.02, zs),
+                              np.stack([sx.ravel(), sy.ravel(), np.full(9, 0.01)], axis=1)])
     zr = np.linspace(0.03, 0.97, n_rec_well)
     rec_w = np.concatenate([_well(0.98, 0.25, zr), _well(0.98, 0.75, zr), _well(0.50, 0.98, zr)])
     g = np.linspace(0.1, 0.9, n_surf)

@@ -77,7 +77,8 @@ def make_or_load_data(a, grid, v_true):
                        f"(scikit-fmm, 2º orden, malla {grid.n}^3) sobre el modelo verdadero + ruido gaussiano.",
         "ruido_desv_std_s": a.noise, "semilla": a.seed,
         "n_fuentes": len(src), "n_receptores": len(rec), "n_tiempos": int(t_obs.size),
-        "geometria": "fuentes en 2 pozos (x=0.02; y=0.25, 0.75); receptores en 3 pozos "
+        "geometria": ("fuentes extra: pozo (x=0.50, y=0.02) y malla 3x3 en superficie; " if a.dense else "") +
+                     "fuentes en 2 pozos (x=0.02; y=0.25, 0.75); receptores en 3 pozos "
                      "(x=0.98,y=0.25 / x=0.98,y=0.75 / x=0.50,y=0.98) y malla 8x8 en superficie",
         "modelo": "v = 2.0 + 1.0 z - 0.6 exp(-|r-(0.55,0.50,0.45)|^2/(2*0.12^2)) "
                   "+ 0.5 exp(-|r-(0.35,0.35,0.75)|^2/(2*0.10^2))  [km/s, km]; "

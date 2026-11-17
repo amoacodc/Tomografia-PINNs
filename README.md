@@ -155,3 +155,7 @@ run_tomography.py      # generación de datos, entrenamiento, evaluación y figu
 
 Para usar datos reales: sustituir `src`, `rec` y `t_obs` en `run_tomography.py` (normalizando
 coordenadas al cuadrado [0, 1]²) y ajustar `--vmin/--vmax`.
+
+## Licencia
+
+Distribuido bajo la licencia MIT. Ver [LICENSE](LICENSE).

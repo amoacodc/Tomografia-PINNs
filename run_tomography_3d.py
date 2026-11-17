@@ -24,13 +24,13 @@ from pinn_tomo.pinn import TauNet, VelocityNet, eikonal_residual, traveltime, ve
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--iters", type=int, default=10000)
-    p.add_argument("--lr", type=float, default=2e-3)
+    p.add_argument("--iters", type=int, default=25000)
+    p.add_argument("--lr", type=float, default=1e-3)
     p.add_argument("--n-colloc", type=int, default=4000)
     p.add_argument("--w-pde", type=float, default=100.0)
     p.add_argument("--w-data", type=float, default=1.0)
     p.add_argument("--w-reg", type=float, default=0.0)
-    p.add_argument("--v-width", type=int, default=48)
+    p.add_argument("--v-width", type=int, default=96)
     p.add_argument("--tau-width", type=int, default=64)
     p.add_argument("--v-fourier", type=int, default=0, help="nº de características de Fourier en v_net")
     p.add_argument("--v-sigma", type=float, default=2.0)

@@ -28,6 +28,7 @@
   img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:10px; background:#fff; }
   code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em; }
   pre { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; overflow-x:auto; }
+  .btn { display:inline-block; padding:10px 16px; border-radius:8px; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; }
   footer { margin-top:56px; color:var(--muted); font-size:.9rem; }
   @media (max-width:700px) { .frame iframe { height:480px; } h1 { font-size:1.6rem; } }
 </style>
@@ -52,6 +53,13 @@
   <p class="hint">Arrastra para rotar, rueda para zoom y pasa el ratón para ver la velocidad.
   Corte en x = 0.30, y = 0.50, z = 0.75 km: la cara vertical atraviesa la anomalía lenta y el piso
   muestra la anomalía rápida. <a href="bloque_3d.html">Abrir a pantalla completa</a>.</p>
+
+  <h2>Notebook Jupyter</h2>
+  <p>El cuaderno <a href="notebook_3d.html"><b>Tomografía sísmica 3D con PINN</b></a> explica y ejecuta todo el
+  proceso paso a paso: física, datos, entrenamiento, cortes del modelo, validación con Fast Marching y bloque 3D.
+  También puedes <a href="https://github.com/amoacodc/Tomografia-PINNs/blob/main/notebooks/tomografia_3d.ipynb">ver o
+  descargar el archivo .ipynb</a> para ejecutarlo en Jupyter o VS Code.</p>
+  <p><a class="btn" href="notebook_3d.html">Abrir el notebook →</a></p>
 
   <h2>Cortes 3D</h2>
   <img src="img/cortes_3d.png" alt="Cortes horizontales y verticales del modelo 3D: verdadero, PINN y error" loading="lazy">

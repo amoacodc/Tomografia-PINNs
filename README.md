@@ -96,6 +96,13 @@ La clave fue **entrenar más**: con 10 000 iteraciones la PINN no llegaba a ajus
 datos al nivel del ruido. La geometría densa necesita aún más iteraciones (su campo de
 tiempos es más complejo) y sus datos están en `data/3d_densa/`.
 
+### Notebook Jupyter
+
+[`notebooks/tomografia_3d.ipynb`](notebooks/tomografia_3d.ipynb) explica y ejecuta paso a paso la
+inversión 3D: física, datos, entrenamiento, cortes, validación con FMM y bloque 3D interactivo.
+Se guarda ejecutado, con sus figuras (GitHub no muestra el bloque interactivo; ejecútalo en
+Jupyter, VS Code o Colab).
+
 ### Bloque 3D
 
 `plot_block_3d.py` dibuja el cubo con un corte en esquina (verdadero, PINN y error) y genera
@@ -151,6 +158,7 @@ Salidas en `outputs/`: `velocidad.png`, `entrenamiento.png`, `ajuste_tiempos.png
 
 ```
 data/                  # datos sintéticos guardados
+notebooks/             # notebook Jupyter de la tomografía 3D
 export_data.py         # exporta los datos a data/
 pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (datos + validación)
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización

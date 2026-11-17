@@ -4,3 +4,6 @@ matplotlib
 torch
 scikit-fmm
 plotly
+nbformat
+nbclient
+ipykernel

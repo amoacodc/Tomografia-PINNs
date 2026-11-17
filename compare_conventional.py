@@ -21,7 +21,7 @@ import numpy as np
 
 from pinn_tomo.conventional import invert
 
-DEFAULT_LAM = {2: 0.2, 3: None}   # 3D: se fija tras la calibración
+DEFAULT_LAM = {2: 0.2, 3: 0.1}   # elegidos con el principio de discrepancia
 
 
 def load_2d():

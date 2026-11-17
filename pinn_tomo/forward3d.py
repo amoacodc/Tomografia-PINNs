@@ -37,6 +37,24 @@ def true_velocity(x, y, z):
     return v
 
 
+ANOMALIES = {"lenta": ((0.55, 0.50, 0.45), -0.6, 0.12), "rapida": ((0.35, 0.35, 0.75), 0.5, 0.10)}
+
+
+def anomaly_metrics(v_inv, grid):
+    """Para cada anomalía: amplitud recuperada en su centro (respecto al fondo 2 + z)
+    como % de la verdadera, y RMSE dentro de una esfera de radio 2 sigma."""
+    X, Y, Z = grid.mesh()
+    v_true = true_velocity(X, Y, Z)
+    out = {}
+    for name, (c, amp, sig) in ANOMALIES.items():
+        ix, iy, iz = (int(round(ci / grid.dx)) for ci in c)
+        rec_amp = v_inv[iz, iy, ix] - (2.0 + 1.0 * c[2])
+        mask = (X - c[0]) ** 2 + (Y - c[1]) ** 2 + (Z - c[2]) ** 2 < (2 * sig) ** 2
+        out[f"anomalia_{name}_amplitud_recuperada_%"] = float(100 * rec_amp / amp)
+        out[f"anomalia_{name}_rmse_km_s"] = float(np.sqrt(np.mean((v_inv[mask] - v_true[mask]) ** 2)))
+    return out
+
+
 def _well(x, y, z_vals):
     return np.stack([np.full_like(z_vals, x), np.full_like(z_vals, y), z_vals], axis=1)
 

@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from pinn_tomo.forward3d import Grid3D, geometry_3d, traveltimes, true_velocity
+from pinn_tomo.forward3d import Grid3D, anomaly_metrics, geometry_3d, traveltimes, true_velocity
 from pinn_tomo.pinn import TauNet, VelocityNet, eikonal_residual, traveltime, velocity_roughness
 
 
@@ -138,6 +138,7 @@ def main():
         "rms_tiempos_modelo_inicial_ms": float(1e3 * np.sqrt(np.mean((t_fmm_init - t_obs) ** 2))),
         "rms_tiempos_modelo_invertido_ms (FMM)": float(1e3 * np.sqrt(np.mean((t_fmm_inv - t_obs) ** 2))),
         "ruido_ms": a.noise * 1e3,
+        **anomaly_metrics(v_inv, grid),
         "tiempo_entrenamiento_s": train_time,
     }
     print(json.dumps(metrics, indent=2, ensure_ascii=False))

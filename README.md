@@ -1,5 +1,7 @@
 # Tomografía sísmica de tiempos de viaje con PINN
 
+🌐 **Sitio web con el bloque 3D interactivo:** https://amoacodc.github.io/Tomografia-PINNs/
+
 Inversión de un modelo de velocidad 2D a partir de tiempos de primera llegada usando una
 **red neuronal informada por la física (PINN)** que resuelve la ecuación eikonal
 (enfoque tipo *PINNtomo*, Waheed et al., 2021).

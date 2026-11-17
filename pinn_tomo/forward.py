@@ -42,6 +42,23 @@ def true_velocity(x, z):
     return v
 
 
+ANOMALIES = {"lenta": ((0.55, 0.45), -0.6, 0.10), "rapida": ((0.30, 0.78), 0.5, 0.08)}
+
+
+def anomaly_metrics(v_inv, grid):
+    """Amplitud recuperada en el centro de cada anomalía (% de la verdadera, respecto al
+    fondo 2 + z) y RMSE dentro de un círculo de radio 2 sigma."""
+    X, Z = grid.mesh()
+    v_true = true_velocity(X, Z)
+    out = {}
+    for name, (c, amp, sig) in ANOMALIES.items():
+        ix, iz = (int(round(ci / grid.dx)) for ci in c)
+        mask = (X - c[0]) ** 2 + (Z - c[1]) ** 2 < (2 * sig) ** 2
+        out[f"anomalia_{name}_amplitud_recuperada_%"] = float(100 * (v_inv[iz, ix] - (2.0 + c[1])) / amp)
+        out[f"anomalia_{name}_rmse_km_s"] = float(np.sqrt(np.mean((v_inv[mask] - v_true[mask]) ** 2)))
+    return out
+
+
 def crosswell_geometry(n_src=12, n_rec_well=31, n_rec_surf=21):
     """Fuentes en el pozo izquierdo; receptores en el pozo derecho y en superficie."""
     src = np.stack([np.full(n_src, 0.02), np.linspace(0.05, 0.95, n_src)], axis=1)

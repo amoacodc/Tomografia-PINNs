@@ -4,3 +4,5 @@ outputs/*.pt
 outputs/*.npz
 outputs_3d/*.pt
 outputs_3d/*.npz
+outputs/*.npy
+outputs_3d/*.npy

@@ -1,0 +1,36 @@
+[
+  {
+    "metodo": "PINN",
+    "rms_tiempos_ms (FMM)": 1.5845512631317586,
+    "error_rel_velocidad_%": 2.8587898548955772,
+    "rmse_velocidad_km_s": 0.07162804866155416,
+    "anomalia_lenta_amplitud_recuperada_%": 54.09164810180664,
+    "anomalia_lenta_rmse_km_s": 0.11409274822288845,
+    "anomalia_rapida_amplitud_recuperada_%": 32.48057556152344,
+    "anomalia_rapida_rmse_km_s": 0.1361484903765491,
+    "tiempo_s": 150.53461265563965
+  },
+  {
+    "metodo": "Convencional (rayos curvos)",
+    "rms_tiempos_ms (FMM)": 0.9848510175901048,
+    "error_rel_velocidad_%": 2.6145016896310107,
+    "rmse_velocidad_km_s": 0.06550731734615242,
+    "anomalia_lenta_amplitud_recuperada_%": 60.10125179758556,
+    "anomalia_lenta_rmse_km_s": 0.10505316218911168,
+    "anomalia_rapida_amplitud_recuperada_%": 51.95507376057975,
+    "anomalia_rapida_rmse_km_s": 0.09924979548025407,
+    "tiempo_s": 7.140785455703735,
+    "lam": 0.2,
+    "rms_por_iteracion_ms": [
+      37.80768156113141,
+      6.546194609885099,
+      2.4693887426796084,
+      1.2115856913320413,
+      0.9961812616844168,
+      0.9854830153481124,
+      0.9851161624185569,
+      0.9862979253545048,
+      0.9848510175901048
+    ]
+  }
+]

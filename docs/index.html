@@ -29,6 +29,11 @@
   code, pre { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.9em; }
   pre { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; overflow-x:auto; }
   .btn { display:inline-block; padding:10px 16px; border-radius:8px; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; }
+  .tablewrap { overflow-x:auto; }
+  table.cmp { border-collapse:collapse; margin:8px 0 12px; font-variant-numeric:tabular-nums; }
+  table.cmp th, table.cmp td { padding:7px 14px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+  table.cmp th:first-child, table.cmp td:first-child { text-align:left; }
+  table.cmp thead th { color:var(--muted); font-weight:600; }
   footer { margin-top:56px; color:var(--muted); font-size:.9rem; }
   @media (max-width:700px) { .frame iframe { height:480px; } h1 { font-size:1.6rem; } }
 </style>
@@ -60,6 +65,25 @@
   También puedes <a href="https://github.com/amoacodc/Tomografia-PINNs/blob/main/notebooks/tomografia_3d.ipynb">ver o
   descargar el archivo .ipynb</a> para ejecutarlo en Jupyter o VS Code.</p>
   <p><a class="btn" href="notebook_3d.html">Abrir el notebook →</a></p>
+
+  <h2>PINN vs. tomografía convencional</h2>
+  <p>Los mismos datos invertidos con el método clásico de <b>rayos curvos</b> (inversión linealizada iterativa con
+  suavizado; λ elegido con el principio de discrepancia, sin mirar el modelo verdadero).</p>
+  <div class="tablewrap"><table class="cmp">
+    <thead><tr><th>Métrica</th><th>2D PINN</th><th>2D conv.</th><th>3D PINN</th><th>3D conv.</th></tr></thead>
+    <tbody>
+      <tr><td>RMS tiempos (ruido 1 ms)</td><td>1.59 ms</td><td><b>0.99 ms</b></td><td>1.15 ms</td><td><b>0.93 ms</b></td></tr>
+      <tr><td>Error relativo de velocidad</td><td>2.86 %</td><td><b>2.62 %</b></td><td><b>1.99 %</b></td><td>2.42 %</td></tr>
+      <tr><td>Anomalía lenta recuperada</td><td>54 %</td><td><b>60 %</b></td><td><b>60 %</b></td><td>57 %</td></tr>
+      <tr><td>Anomalía rápida recuperada</td><td>32 %</td><td><b>52 %</b></td><td>51 %</td><td><b>57 %</b></td></tr>
+      <tr><td>Tiempo de cálculo (CPU)</td><td>150 s</td><td><b>7 s</b></td><td>~7 min</td><td>~8 min</td></tr>
+    </tbody>
+  </table></div>
+  <p>En 2D la convencional gana en todo y es ~20× más rápida. En 3D el resultado es mixto: la PINN da el mejor modelo
+  global y la convencional ajusta mejor los datos y las anomalías, con un coste similar.</p>
+  <img src="img/comparacion_3d.png" alt="Cortes 3D: verdadera, PINN, convencional y errores de ambos métodos" loading="lazy">
+  <p class="hint">Filas: verdadera, PINN, convencional, error PINN, error convencional.
+  <a href="img/comparacion_2d.png">Ver la comparación 2D</a>.</p>
 
   <h2>Cortes 3D</h2>
   <img src="img/cortes_3d.png" alt="Cortes horizontales y verticales del modelo 3D: verdadero, PINN y error" loading="lazy">

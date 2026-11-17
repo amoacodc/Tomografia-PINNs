@@ -128,6 +128,49 @@ python run_tomography_3d.py --iters 40000          # aún más entrenamiento
 python run_tomography_3d.py --dense --iters 40000  # geometría densa (27 fuentes)
 ```
 
+## Comparación con tomografía convencional
+
+`compare_conventional.py` invierte los mismos datos con el método clásico: **tomografía de
+rayos curvos con inversión linealizada iterativa** (`pinn_tomo/conventional.py`). En cada
+iteración: tiempos con FMM en el modelo actual → trazado de rayos por `−∇T` → matriz de
+sensibilidad → mínimos cuadrados con suavizado laplaciano (LSQR). Mismo modelo inicial
+(2.5 km/s) y misma validación con FMM que la PINN.
+
+La regularización λ se eligió con el **principio de discrepancia** (el mayor λ cuyo ajuste
+queda al nivel del ruido, ~1 ms), sin mirar el modelo verdadero: λ = 0.2 en 2D y 0.1 en 3D.
+
+| Métrica | 2D PINN | 2D convencional | 3D PINN | 3D convencional |
+|---|---|---|---|---|
+| RMS tiempos (FMM), ruido = 1 ms | 1.59 ms | **0.99 ms** | 1.15 ms | **0.93 ms** |
+| Error relativo de velocidad | 2.86 % | **2.62 %** | **1.99 %** | 2.42 % |
+| Anomalía lenta: amplitud recuperada | 54 % | **60 %** | **60 %** | 57 % |
+| Anomalía lenta: RMSE (km/s) | 0.114 | **0.105** | 0.085 | **0.077** |
+| Anomalía rápida: amplitud recuperada | 32 % | **52 %** | 51 % | **57 %** |
+| Anomalía rápida: RMSE (km/s) | 0.136 | **0.099** | 0.078 | **0.069** |
+| Tiempo de cálculo (CPU) | 150 s | **7 s** | ~7 min | ~8 min |
+
+![comparación 3D](outputs_3d/comparacion.png)
+
+**Conclusiones**
+
+* En **2D** (problema pequeño y bien cubierto) la inversión convencional es mejor en todo y
+  ~20× más rápida. Entrenar la PINN 2D más tiempo (25 000 iteraciones) ajusta mejor los
+  tiempos (1.21 ms) pero **empeora** el modelo (error 3.75 %): sobreajuste.
+* En **3D** el resultado es mixto: la PINN da el mejor modelo global (menor error en el
+  fondo y el gradiente) y la convencional ajusta mejor los datos y las anomalías. El coste es
+  similar (los tiempos no son estrictamente comparables: la PINN corrió con 4 hilos y la
+  convencional con 2 en paralelo con otro proceso).
+* La convencional depende mucho de λ: con λ = 0.3 en 3D el error global baja a 1.75 % pero
+  los tiempos quedan a 1.45 ms (por encima del ruido) y las anomalías se debilitan.
+* Ventajas propias de la PINN: no necesita trazar rayos ni construir/almacenar matrices de
+  sensibilidad, da un modelo continuo (sin malla) y sirve como solver eikonal para cualquier
+  fuente una vez entrenada.
+
+```bash
+python compare_conventional.py --dim 2      # ~10 s
+python compare_conventional.py --dim 3      # ~8 min
+```
+
 ## Datos
 
 Los datos sintéticos usados están guardados en `data/` (se regeneran con `python export_data.py`):
@@ -164,6 +207,8 @@ export_data.py         # exporta los datos a data/
 pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (datos + validación)
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización
 pinn_tomo/forward3d.py # versión 3D del modelo, geometría y FMM
+pinn_tomo/conventional.py # tomografía convencional de rayos curvos (2D/3D)
+compare_conventional.py   # comparación PINN vs. convencional
 run_tomography_3d.py   # inversión 3D
 plot_block_3d.py       # bloque 3D interactivo (Plotly)
 run_tomography.py      # generación de datos, entrenamiento, evaluación y figuras

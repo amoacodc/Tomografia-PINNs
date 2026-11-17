@@ -11,9 +11,9 @@ SRC, OUT = "notebooks/tomografia_3d.ipynb", "docs/notebook_3d.html"
 GITHUB = "https://github.com/amoacodc/Tomografia-PINNs/blob/main/notebooks/tomografia_3d.ipynb"
 
 CSS = """<style>
-  /* tablas de markdown: ancho según contenido, sin partir fórmulas; scroll horizontal en móvil */
-  .jp-RenderedMarkdown table { width:auto !important; max-width:100%; display:block; overflow-x:auto; margin:12px 0; }
-  .jp-RenderedMarkdown td, .jp-RenderedMarkdown th { white-space:nowrap !important; padding:6px 14px; text-align:left !important; }
+  /* tablas de markdown: ancho según contenido; en una línea si hay espacio, con saltos solo si no cabe */
+  .jp-RenderedMarkdown table { width:auto !important; max-width:100%; table-layout:auto; margin:12px 0; }
+  .jp-RenderedMarkdown td, .jp-RenderedMarkdown th { white-space:normal !important; padding:6px 14px; text-align:left !important; }
   .site-nav { max-width:1100px; margin:16px auto 0; padding:0 16px; font:15px system-ui,sans-serif; }
 </style>"""
 

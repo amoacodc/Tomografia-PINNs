@@ -7795,8 +7795,8 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --><style>
   /* tablas de markdown: ancho según contenido, sin partir fórmulas; scroll horizontal en móvil */
-  .jp-RenderedMarkdown table { width:auto; max-width:100%; display:block; overflow-x:auto; margin:12px 0; }
-  .jp-RenderedMarkdown td, .jp-RenderedMarkdown th { white-space:nowrap; padding:6px 14px; text-align:left; }
+  .jp-RenderedMarkdown table { width:auto !important; max-width:100%; display:block; overflow-x:auto; margin:12px 0; }
+  .jp-RenderedMarkdown td, .jp-RenderedMarkdown th { white-space:nowrap !important; padding:6px 14px; text-align:left !important; }
   .site-nav { max-width:1100px; margin:16px auto 0; padding:0 16px; font:15px system-ui,sans-serif; }
 </style>
 </head>
@@ -7847,13 +7847,13 @@ por construcción y la singularidad del frente de onda en la fuente queda absorb
 <tbody>
 <tr>
 <td><code>tau_net</code></td>
-<td>$(x, y, z, x_s, y_s, z_s)$</td>
-<td>$\tau&gt;0$ → tiempo de viaje para cualquier fuente</td>
+<td>(x, y, z, xₛ, yₛ, zₛ)</td>
+<td>τ &gt; 0 → tiempo de viaje para cualquier fuente</td>
 </tr>
 <tr>
 <td><code>v_net</code></td>
-<td>$(x, y, z)$</td>
-<td>$v \in [v_{min}, v_{max}]$ → <strong>modelo de velocidad invertido</strong></td>
+<td>(x, y, z)</td>
+<td>v ∈ [v<sub>min</sub>, v<sub>max</sub>] → <strong>modelo de velocidad invertido</strong></td>
 </tr>
 </tbody>
 </table>

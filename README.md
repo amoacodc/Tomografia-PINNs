@@ -106,7 +106,12 @@ el ratón).
 python plot_block_3d.py                       # corte por defecto en (0.30, 0.50, 0.75) km
 python plot_block_3d.py --cut 0.5 0.5 0.45    # otro corte
 python plot_block_3d.py --inline-js           # HTML que funciona sin internet
+python plot_block_3d.py --local-js --out docs/bloque_3d.html   # actualizar GitHub Pages
 ```
+
+**Sitio web (GitHub Pages):** la carpeta `docs/` contiene una página con el bloque 3D
+interactivo y las figuras. Se publica desde *Settings → Pages → Deploy from a branch →
+`main` / `/docs`*.
 
 ```bash
 python run_tomography_3d.py                 # lee data/3d/ (o lo genera si no existe)

@@ -7,6 +7,7 @@ Genera un HTML interactivo (Plotly: rotar, zoom, valores al pasar el ratón).
 Requiere outputs_3d/results.npz (se genera con run_tomography_3d.py).
     python plot_block_3d.py
     python plot_block_3d.py --cut 0.3 0.5 0.75
+    python plot_block_3d.py --local-js --out docs/bloque_3d.html   # sitio de GitHub Pages
 """
 import argparse
 from pathlib import Path
@@ -45,6 +46,8 @@ def main():
     p.add_argument("--cut", type=float, nargs=3, default=[0.30, 0.50, 0.75], metavar=("XC", "YC", "ZC"))
     p.add_argument("--out", default="outputs_3d/bloque_3d.html")
     p.add_argument("--inline-js", action="store_true", help="incrustar plotly.js (funciona sin internet)")
+    p.add_argument("--local-js", action="store_true",
+                   help="usar plotly.min.js en la misma carpeta que el HTML (para GitHub Pages)")
     a = p.parse_args()
 
     r = np.load(a.results)
@@ -76,12 +79,12 @@ def main():
     scene = dict(xaxis=dict(title="x (km)", range=[0, 1]), yaxis=dict(title="y (km)", range=[0, 1]),
                  zaxis=dict(title="z (km)", range=[1, 0]), aspectmode="cube",
                  camera=dict(eye=dict(x=1.6, y=-1.6, z=1.1)))
-    fig.update_layout(scene=scene, scene2=scene, scene3=scene, height=620, width=1800,
+    fig.update_layout(scene=scene, scene2=scene, scene3=scene, height=620, autosize=True,
                       title=f"Tomografía PINN 3D — bloque con corte en x={a.cut[0]}, y={a.cut[1]}, "
                             f"z={a.cut[2]} km (arrastra para rotar)",
                       legend=dict(x=0.01, y=0.02), margin=dict(l=10, r=10, t=70, b=10))
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
-    fig.write_html(a.out, include_plotlyjs=True if a.inline_js else "cdn")
+    fig.write_html(a.out, include_plotlyjs=True if a.inline_js else ("directory" if a.local_js else "cdn"), config={"responsive": True})
     print(f"Guardado {a.out}")
 
 

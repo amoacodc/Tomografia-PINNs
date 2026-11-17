@@ -1,8 +1,12 @@
 {
-  "rmse_velocidad_km_s": 0.05825125763060591,
-  "error_rel_velocidad_%": 2.3202951013564785,
+  "rmse_velocidad_km_s": 0.04986567921352956,
+  "error_rel_velocidad_%": 1.9862762781652714,
   "rms_tiempos_modelo_inicial_ms": 37.83787299491414,
-  "rms_tiempos_modelo_invertido_ms (FMM)": 1.7298796568611194,
+  "rms_tiempos_modelo_invertido_ms (FMM)": 1.1479667085177157,
   "ruido_ms": 1.0,
-  "tiempo_entrenamiento_s": 197.88756489753723
+  "anomalia_lenta_amplitud_recuperada_%": 60.02560806274414,
+  "anomalia_lenta_rmse_km_s": 0.0853156943137729,
+  "anomalia_rapida_amplitud_recuperada_%": 50.58126449584961,
+  "anomalia_rapida_rmse_km_s": 0.07760024763577575,
+  "tiempo_entrenamiento_s": 400.8286144733429
 }

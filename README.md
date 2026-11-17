@@ -64,16 +64,35 @@ suavizada, como es típico por la cobertura limitada de rayos en geometría entr
   superficie → **1344 tiempos** con 1 ms de ruido (FMM 3D en malla 161³).
 * Las mismas redes con `dim=3`: `tau_net(x, y, z, xs, ys, zs)` y `v_net(x, y, z)`.
 
-| Métrica (3D, ~3.5 min en CPU) | Valor |
+| Métrica (3D, 25 000 iteraciones, ~7 min en CPU) | Valor |
 |---|---|
 | RMS tiempos, modelo inicial | 37.8 ms |
-| RMS tiempos, modelo PINN (recalculado con FMM 3D) | **1.73 ms** (ruido = 1 ms) |
-| Error relativo de velocidad | 2.3 % |
+| RMS tiempos, modelo PINN (recalculado con FMM 3D) | **1.15 ms** (ruido = 1 ms) |
+| Error relativo de velocidad | 2.0 % |
+| Amplitud recuperada, anomalía lenta / rápida | 60 % / 51 % |
 
 ![cortes 3D](outputs_3d/velocidad_cortes.png)
 
-Como en 2D, la anomalía lenta y el gradiente se recuperan (suavizados) y la anomalía
-rápida profunda apenas aparece por la cobertura limitada de rayos.
+#### Cómo se mejoró la anomalía rápida
+
+La anomalía rápida sí está en los datos: cambia hasta 14 ms los tiempos (160 de 1344
+tiempos cambian más de 3 ms). Se probaron varias configuraciones (amplitud recuperada en
+el centro de cada anomalía):
+
+| Configuración | Rápida | Lenta | RMS FMM |
+|---|---|---|---|
+| Inicial (10 000 it., `v_net` ancho 48, lr 2e-3) | 28 % | 47 % | 1.73 ms |
+| `tau_net` ancho 128 | 31 % | 47 % | 1.70 ms |
+| `w_data = 10` | 22 % | 30 % | 2.78 ms |
+| `v_net` ancho 96, lr 1e-3 | 34 % | 45 % | 1.73 ms |
+| … + Fourier (32, σ = 1.5) | 36 % | 45 % | 1.74 ms |
+| … + `tau_net` 128, 20 000 it. | 41 % | 54 % | 1.37 ms |
+| **`v_net` 96, lr 1e-3, 25 000 it. (por defecto)** | **51 %** | **60 %** | **1.15 ms** |
+| Geometría densa (27 fuentes, `--dense`), 10 000 it. | 21 % | 40 % | 2.27 ms |
+
+La clave fue **entrenar más**: con 10 000 iteraciones la PINN no llegaba a ajustar los
+datos al nivel del ruido. La geometría densa necesita aún más iteraciones (su campo de
+tiempos es más complejo) y sus datos están en `data/3d_densa/`.
 
 ### Bloque 3D
 
@@ -91,7 +110,8 @@ python plot_block_3d.py --inline-js           # HTML que funciona sin internet
 
 ```bash
 python run_tomography_3d.py                 # lee data/3d/ (o lo genera si no existe)
-python run_tomography_3d.py --iters 20000
+python run_tomography_3d.py --iters 40000          # aún más entrenamiento
+python run_tomography_3d.py --dense --iters 40000  # geometría densa (27 fuentes)
 ```
 
 ## Datos
@@ -104,6 +124,7 @@ Los datos sintéticos usados están guardados en `data/` (se regeneran con `pyth
 | `fuentes.csv`, `receptores.csv` | posiciones (km) |
 | `modelo_verdadero.npz` | modelo de velocidad verdadero en malla 201×201 (`x_km`, `z_km`, `v_km_s`) |
 | `info.json` | descripción, fórmula del modelo, ruido y semilla |
+| `3d_densa/` | datos 3D con 27 fuentes (`--dense`) |
 | `3d/` | datos 3D: `tiempos.csv` (con columnas `y`), `fuentes.csv`, `receptores.csv`, `info.json` |
 
 ## Uso

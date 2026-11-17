@@ -101,7 +101,7 @@ tiempos es más complejo) y sus datos están en `data/3d_densa/`.
 [`notebooks/tomografia_3d.ipynb`](notebooks/tomografia_3d.ipynb) explica y ejecuta paso a paso la
 inversión 3D: física, datos, entrenamiento, cortes, validación con FMM y bloque 3D interactivo.
 Se guarda ejecutado, con sus figuras (GitHub no muestra el bloque interactivo; ejecútalo en
-Jupyter, VS Code o Colab).
+Jupyter, VS Code o Colab). La página del sitio se regenera con `python build_notebook_page.py`.
 
 ### Bloque 3D
 
@@ -159,6 +159,7 @@ Salidas en `outputs/`: `velocidad.png`, `entrenamiento.png`, `ajuste_tiempos.png
 ```
 data/                  # datos sintéticos guardados
 notebooks/             # notebook Jupyter de la tomografía 3D
+build_notebook_page.py # convierte el notebook en página del sitio (docs/)
 export_data.py         # exporta los datos a data/
 pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (datos + validación)
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización

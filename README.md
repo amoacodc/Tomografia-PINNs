@@ -75,6 +75,20 @@ suavizada, como es típico por la cobertura limitada de rayos en geometría entr
 Como en 2D, la anomalía lenta y el gradiente se recuperan (suavizados) y la anomalía
 rápida profunda apenas aparece por la cobertura limitada de rayos.
 
+### Bloque 3D
+
+`plot_block_3d.py` dibuja el cubo con un corte en esquina (verdadero, PINN y error) y genera
+un HTML interactivo con Plotly (`outputs_3d/bloque_3d.html`: rotar, zoom y valor al pasar
+el ratón).
+
+![bloque 3D](outputs_3d/bloque_3d.png)
+
+```bash
+python plot_block_3d.py                       # corte por defecto en (0.30, 0.50, 0.75) km
+python plot_block_3d.py --cut 0.5 0.5 0.45    # otro corte
+python plot_block_3d.py --inline-js           # HTML que funciona sin internet
+```
+
 ```bash
 python run_tomography_3d.py                 # lee data/3d/ (o lo genera si no existe)
 python run_tomography_3d.py --iters 20000
@@ -114,6 +128,7 @@ pinn_tomo/forward.py   # modelo verdadero, geometría y solver eikonal FMM (dato
 pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización
 pinn_tomo/forward3d.py # versión 3D del modelo, geometría y FMM
 run_tomography_3d.py   # inversión 3D
+plot_block_3d.py       # bloque 3D interactivo (Plotly)
 run_tomography.py      # generación de datos, entrenamiento, evaluación y figuras
 ```
 

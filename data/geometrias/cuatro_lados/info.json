@@ -1,0 +1,6 @@
+{
+  "geometria": "Cuatro lados: fuentes en el pozo izquierdo y en superficie; receptores en el pozo derecho y en el fondo",
+  "ruido_desv_std_s": 0.001,
+  "semilla": 0,
+  "n_tiempos": 624
+}

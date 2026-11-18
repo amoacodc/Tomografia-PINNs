@@ -1,0 +1,6 @@
+{
+  "geometria": "Solo superficie: fuentes y receptores en z = 0",
+  "ruido_desv_std_s": 0.001,
+  "semilla": 0,
+  "n_tiempos": 624
+}

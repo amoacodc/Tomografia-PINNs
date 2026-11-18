@@ -67,6 +67,35 @@ def crosswell_geometry(n_src=12, n_rec_well=31, n_rec_surf=21):
     return src, np.concatenate([rec_w, rec_s], axis=0)
 
 
+GEOMETRIES = {
+    "entre_pozos": "Entre pozos (actual): fuentes en el pozo izquierdo; receptores en el pozo derecho y en superficie",
+    "superficie": "Solo superficie: fuentes y receptores en z = 0",
+    "vsp": "VSP: fuentes en superficie; receptores en el pozo derecho y en superficie",
+    "cuatro_lados": "Cuatro lados: fuentes en el pozo izquierdo y en superficie; receptores en el pozo derecho y en el fondo",
+}
+
+
+def geometry(name):
+    """Geometrías de adquisición con el mismo número de datos (12 fuentes x 52 receptores)."""
+    def line(x, z):
+        return np.stack([np.broadcast_to(x, np.shape(z if np.ndim(z) else x)),
+                         np.broadcast_to(z, np.shape(x if np.ndim(x) else z))], axis=1).astype(float)
+    if name == "entre_pozos":
+        return crosswell_geometry()
+    if name == "superficie":
+        src = line(np.linspace(0.04, 0.96, 12), 0.0)
+        rec = line(np.linspace(0.02, 0.98, 52), 0.0)
+    elif name == "vsp":
+        src = line(np.linspace(0.04, 0.90, 12), 0.0)
+        rec = np.concatenate([line(0.98, np.linspace(0.02, 0.98, 31)), line(np.linspace(0.10, 0.90, 21), 0.0)])
+    elif name == "cuatro_lados":
+        src = np.concatenate([line(0.02, np.linspace(0.10, 0.90, 6)), line(np.linspace(0.15, 0.85, 6), 0.0)])
+        rec = np.concatenate([line(0.98, np.linspace(0.02, 0.98, 26)), line(np.linspace(0.04, 0.96, 26), 0.98)])
+    else:
+        raise ValueError(name)
+    return src, rec
+
+
 def eikonal_fmm(v_grid, grid: Grid, src_xz):
     """Tiempo de viaje T(x, z) para una fuente puntual con Fast Marching de 2º orden."""
     X, Z = grid.mesh()

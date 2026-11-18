@@ -1,0 +1,24 @@
+{
+  "geometria": "entre_pozos",
+  "descripcion": "Entre pozos (actual): fuentes en el pozo izquierdo; receptores en el pozo derecho y en superficie",
+  "cobertura_%": 88.16568047337277,
+  "pinn": {
+    "rms_tiempos_ms": 1.6031835357954978,
+    "error_rel_velocidad_%": 2.877997594478402,
+    "anomalia_lenta_amplitud_recuperada_%": 53.42391586303711,
+    "anomalia_lenta_rmse_km_s": 0.11544675710006728,
+    "anomalia_rapida_amplitud_recuperada_%": 32.05809783935547,
+    "anomalia_rapida_rmse_km_s": 0.13745266438107048,
+    "tiempo_s": 145.39560985565186
+  },
+  "convencional": {
+    "rms_tiempos_ms": 0.9848600205298037,
+    "error_rel_velocidad_%": 2.6143912354198733,
+    "anomalia_lenta_amplitud_recuperada_%": 60.102709645907694,
+    "anomalia_lenta_rmse_km_s": 0.10503094389448846,
+    "anomalia_rapida_amplitud_recuperada_%": 51.96122483917982,
+    "anomalia_rapida_rmse_km_s": 0.09922013148766086,
+    "tiempo_s": 5.355048758643014,
+    "lam": 0.2
+  }
+}

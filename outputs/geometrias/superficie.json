@@ -1,0 +1,24 @@
+{
+  "geometria": "superficie",
+  "descripcion": "Solo superficie: fuentes y receptores en z = 0",
+  "cobertura_%": 6.508875739644971,
+  "pinn": {
+    "rms_tiempos_ms": 1.0165461852100837,
+    "error_rel_velocidad_%": 5.328413400176202,
+    "anomalia_lenta_amplitud_recuperada_%": -5.978226661682129,
+    "anomalia_lenta_rmse_km_s": 0.3265792704128865,
+    "anomalia_rapida_amplitud_recuperada_%": 8.09173583984375,
+    "anomalia_rapida_rmse_km_s": 0.21584219206942087,
+    "tiempo_s": 164.13725638389587
+  },
+  "convencional": {
+    "rms_tiempos_ms": 1.0071218044360923,
+    "error_rel_velocidad_%": 9.982461030073486,
+    "anomalia_lenta_amplitud_recuperada_%": -3.3623342434026724,
+    "anomalia_lenta_rmse_km_s": 0.3051488985238188,
+    "anomalia_rapida_amplitud_recuperada_%": -49.14332636777505,
+    "anomalia_rapida_rmse_km_s": 0.4867242479786603,
+    "tiempo_s": 3.374086890901838,
+    "lam": 0.3
+  }
+}

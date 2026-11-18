@@ -170,15 +170,14 @@ def summary():
     fig.colorbar(ax[3, 3].images[0], ax=ax[3:, 3], shrink=0.7, label="km/s")
     fig.savefig(OUT / "comparacion_geometrias.png", dpi=95)
 
-    rows = [("RMS tiempos (ms)", "rms_tiempos_ms", "{:.2f}"), ("Error relativo velocidad (%)", "error_rel_velocidad_%", "{:.2f}"),
-            ("Anomalía lenta recuperada (%)", "anomalia_lenta_amplitud_recuperada_%", "{:.0f}"),
-            ("Anomalía rápida recuperada (%)", "anomalia_rapida_amplitud_recuperada_%", "{:.0f}")]
-    lines = ["| Métrica | " + " | ".join(f"{titles[n]} PINN | {titles[n]} conv." for n in names) + " |",
-             "|---|" + "---|" * (2 * len(names))]
-    lines.append("| Cobertura de rayos (%) | " + " | ".join(f"{res[n]['cobertura_%']:.0f} | " for n in names).rstrip(" |") + " |")
-    for lab, k, f in rows:
-        lines.append(f"| {lab} | " + " | ".join(f"{f.format(res[n]['pinn'][k])} | {f.format(res[n]['convencional'][k])}" for n in names) + " |")
-    lines.append("| λ (convencional) | " + " | ".join(f" | {res[n]['convencional']['lam']}" for n in names) + " |")
+    lines = ["| Geometría | Cobertura de rayos | Método | RMS tiempos (ms) | Error velocidad (%) | Anomalía lenta (%) | Anomalía rápida (%) |",
+             "|---|---|---|---|---|---|---|"]
+    for n in names:
+        for key, lab in [("pinn", "PINN"), ("convencional", f"Convencional (λ = {res[n]['convencional']['lam']})")]:
+            m = res[n][key]
+            lines.append(f"| {titles[n] if key == 'pinn' else ''} | {str(round(res[n]['cobertura_%'])) + ' %' if key == 'pinn' else ''} | {lab} | "
+                         f"{m['rms_tiempos_ms']:.2f} | {m['error_rel_velocidad_%']:.2f} | "
+                         f"{m['anomalia_lenta_amplitud_recuperada_%']:.0f} | {m['anomalia_rapida_amplitud_recuperada_%']:.0f} |")
     table = "\n".join(lines)
     (OUT / "tabla.md").write_text(table + "\n")
     print(table)

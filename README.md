@@ -171,6 +171,49 @@ python compare_conventional.py --dim 2      # ~10 s
 python compare_conventional.py --dim 3      # ~8 min
 ```
 
+## Comparación de geometrías de adquisición (2D)
+
+`compare_geometries.py` invierte el mismo modelo con 4 geometrías, todas con el **mismo número
+de datos** (12 fuentes × 52 receptores = 624 tiempos, ruido 1 ms), usando la PINN y la
+inversión convencional (λ por principio de discrepancia). Datos en `data/geometrias/`.
+"Cobertura" = % de celdas atravesadas por rayos en el modelo verdadero.
+
+| Geometría | Cobertura de rayos | Método | RMS tiempos (ms) | Error velocidad (%) | Anomalía lenta (%) | Anomalía rápida (%) |
+|---|---|---|---|---|---|---|
+| Entre pozos (actual) | 88 % | PINN | 1.60 | 2.88 | 53 | 32 |
+|  |  | Convencional (λ = 0.2) | 0.98 | 2.61 | 60 | 52 |
+| Solo superficie | 7 % | PINN | 1.02 | 5.33 | -6 | 8 |
+|  |  | Convencional (λ = 0.3) | 1.01 | 9.98 | -3 | -49 |
+| VSP | 51 % | PINN | 1.73 | 9.00 | 26 | 85 |
+|  |  | Convencional (λ = 0.2) | 1.01 | 7.39 | 47 | -44 |
+| Cuatro lados | 86 % | PINN | 2.40 | 2.17 | 54 | 55 |
+|  |  | Convencional (λ = 0.2) | 1.00 | 0.93 | 71 | 88 |
+
+![geometrías](outputs/geometrias/comparacion_geometrias.png)
+
+**Conclusiones**
+
+* **La geometría importa más que el método.** Con buena cobertura (entre pozos, cuatro lados)
+  ambos métodos funcionan; sin ella (superficie, VSP) ninguno recupera las anomalías.
+* **Solo superficie** (7 % de cobertura): con este gradiente vertical los rayos no bajan más de
+  ~50 m. Los datos casi no dependen del interior (el ajuste apenas cambia con λ) y ninguna
+  anomalía se recupera. La convencional deja el interior en el modelo inicial (2.5 km/s); la PINN
+  extrapola un gradiente suave, que por casualidad se parece más al modelo real (error 5.3 % vs 10 %).
+* **VSP** (51 %): solo se ilumina el triángulo entre las fuentes en superficie y el pozo. El 85 %
+  de "anomalía rápida" de la PINN es **engañoso**: rellena la zona sin rayos (abajo a la izquierda)
+  con velocidades altas que no están en los datos (error global 9 %).
+* **Cuatro lados** (86 %, rayos en muchas direcciones): el mejor resultado. La convencional
+  recupera ambas anomalías casi sin estirarlas (error 0.93 %, 71 % / 88 %). La PINN mejora frente a
+  entre pozos (2.17 %), pero con 8000 iteraciones no llega a ajustar los datos (2.40 ms): le falta
+  entrenamiento.
+* Las anomalías se ven estiradas en horizontal con la geometría entre pozos porque casi todos los
+  rayos son horizontales; al añadir rayos verticales (cuatro lados) desaparece ese efecto.
+
+```bash
+python compare_geometries.py --geom cuatro_lados   # una geometría (~3 min)
+python compare_geometries.py --summary             # tabla y figura
+```
+
 ## Datos
 
 Los datos sintéticos usados están guardados en `data/` (se regeneran con `python export_data.py`):
@@ -181,6 +224,7 @@ Los datos sintéticos usados están guardados en `data/` (se regeneran con `pyth
 | `fuentes.csv`, `receptores.csv` | posiciones (km) |
 | `modelo_verdadero.npz` | modelo de velocidad verdadero en malla 201×201 (`x_km`, `z_km`, `v_km_s`) |
 | `info.json` | descripción, fórmula del modelo, ruido y semilla |
+| `geometrias/` | datos 2D de las 4 geometrías (entre pozos, superficie, VSP, cuatro lados) |
 | `3d_densa/` | datos 3D con 27 fuentes (`--dense`) |
 | `3d/` | datos 3D: `tiempos.csv` (con columnas `y`), `fuentes.csv`, `receptores.csv`, `info.json` |
 
@@ -209,6 +253,7 @@ pinn_tomo/pinn.py      # redes tau_net / v_net, residuo eikonal, regularización
 pinn_tomo/forward3d.py # versión 3D del modelo, geometría y FMM
 pinn_tomo/conventional.py # tomografía convencional de rayos curvos (2D/3D)
 compare_conventional.py   # comparación PINN vs. convencional
+compare_geometries.py     # comparación de geometrías de adquisición (2D)
 run_tomography_3d.py   # inversión 3D
 plot_block_3d.py       # bloque 3D interactivo (Plotly)
 run_tomography.py      # generación de datos, entrenamiento, evaluación y figuras

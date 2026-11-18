@@ -1,0 +1,24 @@
+{
+  "geometria": "vsp",
+  "descripcion": "VSP: fuentes en superficie; receptores en el pozo derecho y en superficie",
+  "cobertura_%": 51.183431952662716,
+  "pinn": {
+    "rms_tiempos_ms": 1.7257141916398784,
+    "error_rel_velocidad_%": 8.998837820730559,
+    "anomalia_lenta_amplitud_recuperada_%": 26.09248924255371,
+    "anomalia_lenta_rmse_km_s": 0.1908452878506785,
+    "anomalia_rapida_amplitud_recuperada_%": 85.48593139648438,
+    "anomalia_rapida_rmse_km_s": 0.2628977607064211,
+    "tiempo_s": 154.8376522064209
+  },
+  "convencional": {
+    "rms_tiempos_ms": 1.0050233791049443,
+    "error_rel_velocidad_%": 7.390858843531041,
+    "anomalia_lenta_amplitud_recuperada_%": 46.78120639570183,
+    "anomalia_lenta_rmse_km_s": 0.12806195741628876,
+    "anomalia_rapida_amplitud_recuperada_%": -43.862360295597114,
+    "anomalia_rapida_rmse_km_s": 0.46246078393099904,
+    "tiempo_s": 4.721936225891113,
+    "lam": 0.2
+  }
+}

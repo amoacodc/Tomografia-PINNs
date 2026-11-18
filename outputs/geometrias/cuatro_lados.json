@@ -1,0 +1,24 @@
+{
+  "geometria": "cuatro_lados",
+  "descripcion": "Cuatro lados: fuentes en el pozo izquierdo y en superficie; receptores en el pozo derecho y en el fondo",
+  "cobertura_%": 86.09467455621301,
+  "pinn": {
+    "rms_tiempos_ms": 2.400432312201227,
+    "error_rel_velocidad_%": 2.1745143736497092,
+    "anomalia_lenta_amplitud_recuperada_%": 53.842899322509766,
+    "anomalia_lenta_rmse_km_s": 0.10302335372176241,
+    "anomalia_rapida_amplitud_recuperada_%": 55.45439910888672,
+    "anomalia_rapida_rmse_km_s": 0.08192161059972833,
+    "tiempo_s": 145.64105916023254
+  },
+  "convencional": {
+    "rms_tiempos_ms": 1.001683548982351,
+    "error_rel_velocidad_%": 0.9282564821244693,
+    "anomalia_lenta_amplitud_recuperada_%": 71.44347021068232,
+    "anomalia_lenta_rmse_km_s": 0.05484251998460352,
+    "anomalia_rapida_amplitud_recuperada_%": 87.93359490976505,
+    "anomalia_rapida_rmse_km_s": 0.021550043711592463,
+    "tiempo_s": 5.12365106173924,
+    "lam": 0.2
+  }
+}

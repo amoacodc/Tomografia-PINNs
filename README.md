@@ -202,7 +202,9 @@ inversión convencional (λ por principio de discrepancia). Datos en `data/geome
 * **VSP** (51 %): solo se ilumina el triángulo entre las fuentes en superficie y el pozo. El 85 %
   de "anomalía rápida" de la PINN es **engañoso**: rellena la zona sin rayos (abajo a la izquierda)
   con velocidades altas que no están en los datos (error global 9 %).
-* **Cuatro lados** (86 %, rayos en muchas direcciones): el mejor resultado. La convencional
+* **Cuatro lados** (86 %, rayos en muchas direcciones): el mejor resultado, pero es una
+  **referencia ideal**: receptores horizontales a 1 km de profundidad solo existen con pozos
+  horizontales, minas o túneles. La convencional
   recupera ambas anomalías casi sin estirarlas (error 0.93 %, 71 % / 88 %). La PINN mejora frente a
   entre pozos (2.17 %), pero con 8000 iteraciones no llega a ajustar los datos (2.40 ms): le falta
   entrenamiento.

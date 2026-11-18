@@ -33,6 +33,7 @@
   table.cmp { border-collapse:collapse; margin:8px 0 12px; font-variant-numeric:tabular-nums; }
   table.cmp th, table.cmp td { padding:7px 14px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
   table.cmp th:first-child, table.cmp td:first-child { text-align:left; }
+  table.cmp td:nth-child(3), table.cmp th:nth-child(3) { text-align:left; }
   table.cmp thead th { color:var(--muted); font-weight:600; }
   footer { margin-top:56px; color:var(--muted); font-size:.9rem; }
   @media (max-width:700px) { .frame iframe { height:480px; } h1 { font-size:1.6rem; } }
@@ -84,6 +85,28 @@
   <img src="img/comparacion_3d.png" alt="Cortes 3D: verdadera, PINN, convencional y errores de ambos métodos" loading="lazy">
   <p class="hint">Filas: verdadera, PINN, convencional, error PINN, error convencional.
   <a href="img/comparacion_2d.png">Ver la comparación 2D</a>.</p>
+
+  <h2>Geometrías de adquisición (2D)</h2>
+  <p>El mismo modelo invertido con 4 geometrías, todas con 624 tiempos y 1&nbsp;ms de ruido. <b>La geometría importa más
+  que el método</b>: con buena cobertura de rayos ambos métodos funcionan; sin ella, ninguno recupera las anomalías.</p>
+  <div class="tablewrap"><table class="cmp">
+    <thead><tr><th>Geometría</th><th>Cobertura</th><th>Método</th><th>RMS tiempos</th><th>Error velocidad</th><th>Lenta</th><th>Rápida</th></tr></thead>
+    <tbody>
+      <tr><td>Entre pozos (actual)</td><td>88 %</td><td>PINN</td><td>1.60 ms</td><td>2.88 %</td><td>53 %</td><td>32 %</td></tr>
+      <tr><td></td><td></td><td>Conv.</td><td>0.98 ms</td><td>2.61 %</td><td>60 %</td><td>52 %</td></tr>
+      <tr><td>Solo superficie</td><td>7 %</td><td>PINN</td><td>1.02 ms</td><td>5.33 %</td><td>-6 %</td><td>8 %</td></tr>
+      <tr><td></td><td></td><td>Conv.</td><td>1.01 ms</td><td>9.98 %</td><td>-3 %</td><td>-49 %</td></tr>
+      <tr><td>VSP</td><td>51 %</td><td>PINN</td><td>1.73 ms</td><td>9.00 %</td><td>26 %</td><td>85 %</td></tr>
+      <tr><td></td><td></td><td>Conv.</td><td>1.01 ms</td><td>7.39 %</td><td>47 %</td><td>-44 %</td></tr>
+      <tr><td>Cuatro lados*</td><td>86 %</td><td>PINN</td><td>2.40 ms</td><td>2.17 %</td><td>54 %</td><td>55 %</td></tr>
+      <tr><td></td><td></td><td>Conv.</td><td>1.00 ms</td><td>0.93 %</td><td>71 %</td><td>88 %</td></tr>
+    </tbody>
+  </table></div>
+  <p class="hint">* "Cuatro lados" (receptores horizontales a 1&nbsp;km de profundidad) no es realizable en campo salvo con pozos
+  horizontales, minas o túneles: es una referencia ideal. Solo superficie: los rayos no bajan de ~50&nbsp;m. VSP: el 85&nbsp;%
+  de la PINN es engañoso, rellena la zona sin rayos con velocidades que los datos no justifican.</p>
+  <img src="img/geometrias_2d.png" alt="Rayos, modelos PINN y convencional y sus errores para cada geometría" loading="lazy">
+  <p class="hint">Filas: rayos, PINN, convencional, error PINN, error convencional.</p>
 
   <h2>Cortes 3D</h2>
   <img src="img/cortes_3d.png" alt="Cortes horizontales y verticales del modelo 3D: verdadero, PINN y error" loading="lazy">
